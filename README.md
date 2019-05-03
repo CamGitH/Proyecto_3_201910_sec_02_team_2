@@ -1,1 +1,2 @@
-# Proyecto_3_201910_sec_02_team_2
+Camilo Otalora - 2017832760
+Tomas Langebaek - 201732744
