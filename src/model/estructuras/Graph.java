@@ -27,8 +27,8 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 	public Graph() {
 		v =0;
 		e =0;
-		nodos = null;
-		arcos = null;
+		nodos = new ArrayList<>();
+		arcos = new ArrayList<>();
 	}
 
 

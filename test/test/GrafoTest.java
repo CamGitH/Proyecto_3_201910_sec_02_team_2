@@ -39,6 +39,7 @@ public class GrafoTest<A, K, V> extends TestCase{
 		catch( Exception e )
 		{
 			// Esto no deberí a suceder
+			e.printStackTrace();
 			fail( );
 		}
 	}
