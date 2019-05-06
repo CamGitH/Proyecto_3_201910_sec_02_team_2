@@ -52,6 +52,33 @@ public class Controller {
 
 			}
 		}
+	
+	public String darCaminoCostoMinimo(double pLatitud, double pLongitud ){
+		return "";
+	}
+	
+	public String darNVerticesMasInfracciones(int n){
+		return "";
+	}
+	public String darcaminoMasCorto1(double pLatitud, double pLongitud ){
+		return "";
+	}
+	
+	public String darVerticesEnArea(double pLatitudMin, double pLongitudMin,double pLatitudMax, double pLongitudMax, int pN, int pM){
+		return "";
+	}
+	public String darMSTKruskal(){
+		return "";
+	}
+	public String darMSTPrim(){
+		return "";
+	}
+	public String darCaminosCostoMinimoDijkstra(){
+		return "";
+	}
+	public String darCaminoMasCorto2(double pLatitud, double pLongitud ){
+		return "";
+	}
 
 
 
