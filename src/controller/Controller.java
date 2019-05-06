@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+//import com.opencsv.CSVReaderBuilder;
 
 import model.estructuras.Queue;
 import model.violations.VOMovingViolation;
@@ -55,11 +55,12 @@ public class Controller {
 
 
 
+	@SuppressWarnings("deprecation")
 	public void loadMovingViolations(int numeroSemestre) {
 		List<String[]> list = new ArrayList<String[]>();
 		int uno=0,dos=0,tres=0,cuatro=0,s=0,ss=0;
 		String u = "",d= "",t= "",c= "",i= "",e= ""; 
-		CSVReader reader =null;
+		//CSVReader reader =null;
 		CSVReader reader2 =null;
 
 		try{
@@ -73,7 +74,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				uno=list.size();
-				u="January";
+				u="Enero";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/February_wgs84.csv"),';');
@@ -81,7 +82,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				dos=list.size();
-				d="February";
+				d="Febrero";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/March_wgs84.csv"),';');
@@ -89,7 +90,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				tres=list.size();
-				t="March";
+				t="Marzo";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/Abril_wgs84.csv"),';');
@@ -97,7 +98,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				cuatro=list.size();
-				c="April";
+				c="Abril";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/May_wgs84.csv"),';');
@@ -105,7 +106,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				s=list.size();
-				i="May";
+				i="Mayo";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/June_wgs84.csv"),';');
@@ -113,7 +114,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				ss=list.size();
-				e="June";
+				e="Junio";
 				list.clear();
 				
 				break;
@@ -127,7 +128,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				uno=list.size();
-				u="July";
+				u="Julio";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/August_wgs84.csv"),';');
@@ -135,7 +136,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				dos=list.size();
-				d="Agust";
+				d="Agosto";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/September_wgs84.csv"),';');
@@ -143,7 +144,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				tres=list.size();
-				t="September";
+				t="Septiembre";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/October_wgs84.csv"),';');
@@ -151,7 +152,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				cuatro=list.size();
-				c="October";
+				c="Octubre";
 				list.clear();
 
 				reader2 = new CSVReader(new FileReader("./data/November_wgs84.csv"),';');
@@ -159,7 +160,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				s=list.size();
-				i="November";
+				i="Noviembre";
 				list.clear();
 				
 				reader2 = new CSVReader(new FileReader("./data/December_wgs84.csv"),';');
@@ -167,7 +168,7 @@ public class Controller {
 				list = reader2.readAll();
 				readFiles(list);
 				ss=list.size();
-				e="December";
+				e="Deciembre";
 				list.clear();
 
 				break;
