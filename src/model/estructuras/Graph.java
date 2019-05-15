@@ -178,4 +178,29 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 		Vertice<K, V> e = getVertex(idVertex);
 		return ("''"+e.darID()+"'':{ \n"+"''lat'':"+e.darInfo()+", \n"+"''lon'':"+e.darInfo()+"''adj'':"+adj(e.darID())+"\n }");
 	}
+	
+	// esoto va en elJson
+//	  {
+//	        "id": "3030277953",
+//	        "lat": 38.872231,
+//	        "lon": -76.9821737,
+//	        "adj": [
+//	          "3030277955",
+//	          "639415451"
+//	        ],
+//	        "infractions": [
+//	          "13234919",
+//	          "13234921",
+//	          "13237837",
+//	          "13237850",
+//	          "13237865"] 
+//	    }
+	
+	public String pasaraJSON(Vertice<K, V>){
+		
+	}
+	
+	
+	
+	
 }
