@@ -1,13 +1,18 @@
 package controller;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 
+import model.estructuras.Graph;
 import model.estructuras.Queue;
+import model.violations.GraphInfo;
 import model.violations.VOMovingViolation;
 import view.View;
 
@@ -16,6 +21,8 @@ public class Controller {
 	Queue<VOMovingViolation> cola;
 	// Componente vista (consola)
 	private View view;
+	
+	private Graph grafo;
 
 	//TODO Definir los atributos de estructuras de datos del modelo del mundo del proyecto
 
@@ -27,6 +34,7 @@ public class Controller {
 	{
 		view = new View();
 		cola = new Queue<VOMovingViolation>();
+		grafo = new Graph<>();
 	}
 
 	/**
@@ -260,8 +268,41 @@ public class Controller {
 
 	public void loadJSON(String rutaArchivo) 
 	{
-		// TODO Auto-generated method stub
+		Gson gson = new Gson();
+		JsonReader reader;
+
+		try {
+
+			reader = new JsonReader(new FileReader("./data/finalGraph.json"));
+			readFilesJson(gson, reader);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	private void readFilesJson(Gson pGson, JsonReader pReader){
+		GraphInfo[] lista = pGson.fromJson(pReader, GraphInfo[].class);
+		System.out.println(lista.length);
+		for(int i = 0; i<lista.length;i++){
+			
+			if(!(lista[i].getAdj().length==0)){
+				for(int j = 0; j<lista[i].getInfractions().length;j++){
+					double peso = 0;
+					double latitud = lista[i].getLat();
+					double longitud = lista[i].getLon();
+					long 
+					
+					
+				grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
+				}
+			
+
+			}
+		}
+		System.out.println("-------------------");
+	}
+}
 
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
