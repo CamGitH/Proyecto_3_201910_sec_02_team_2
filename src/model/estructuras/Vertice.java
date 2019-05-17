@@ -7,7 +7,10 @@ public class Vertice<K, V> {
 	boolean marcado;
 	int numeroArcos =0;
 	
-	public void vertice( K pId , V pInfoVertice)
+	
+	
+	
+	public void Vertice( K pId , V pInfoVertice)
 	{
 	id = pId;
 	numeroArcos=0;

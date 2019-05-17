@@ -11,7 +11,9 @@ import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 
 import model.estructuras.Graph;
+import model.estructuras.LinkedList;
 import model.estructuras.Queue;
+import model.estructuras.Vertice;
 import model.violations.GraphInfo;
 import model.violations.VOMovingViolation;
 import view.View;
@@ -23,6 +25,8 @@ public class Controller {
 	private View view;
 
 	private Graph grafo;
+	
+	LinkedList<VOMovingViolation> listaEncadenda;
 
 	//TODO Definir los atributos de estructuras de datos del modelo del mundo del proyecto
 
@@ -35,6 +39,7 @@ public class Controller {
 		view = new View();
 		cola = new Queue<VOMovingViolation>();
 		grafo = new Graph<>();
+		listaEncadenda = new LinkedList<VOMovingViolation>();
 	}
 
 	/**
@@ -289,19 +294,58 @@ public class Controller {
 		for(int i = 0; i<lista.length;i++){
 
 			if(!(lista[i].getAdj().length==0)){
-				for(int j = 0; j<lista[i].getInfractions().length;j++){
+				for(int j = 0; j<lista[i].getAdj().length;j++){
 					double peso = 0;
 					double latitud = lista[i].getLat();
 					double longitud = lista[i].getLon();
+					double latitud2 = 0;
+					double longitud2 = 0;
+					boolean encontro = true;
+					for(int k = 0; k<lista.length && encontro;k++){
+						if(lista[k].getId()==lista[i].getId()){
+							latitud2 = lista[k].getLat();
+							longitud2 = lista[k].getLon();
+							encontro = false;
+						}
+						
+					}
+					peso = distance(latitud, latitud2, longitud, longitud2, 0.0, 0.0);
 					
-					
-
-					grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
+					try {
+						grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				
+				Vertice<K, V> = new Vertice<>()
+				grafo.addVertex(lista[i].getId(), infoVertex);
+				
+				
 			}
 
 		}
 
+	}
+	
+	public static double distance(double lat1, double lat2, double lon1,
+	        double lon2, double el1, double el2) {
+
+	    final int R = 6371; // Radius of the earth
+
+	    double latDistance = Math.toRadians(lat2 - lat1);
+	    double lonDistance = Math.toRadians(lon2 - lon1);
+	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+	            + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+	            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	    double distance = R * c * 1000000; // convert to km
+
+	    double height = el1 - el2;
+
+	    distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+	    return Math.sqrt(distance);
 	}
 
 
