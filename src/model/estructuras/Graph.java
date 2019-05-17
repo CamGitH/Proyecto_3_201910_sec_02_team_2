@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javafx.scene.shape.Arc;
+
 public class Graph<K,V,A> implements IGraph<K, V, A> {
 
 	private Vertice<K, V> raiz;
@@ -175,24 +177,17 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 		return arcos;
 	}
 	
+	
+	public Vertice<K, V> darRaiz(){
+		return raiz;
+	}
+	
 	public String toString(K idVertex){
 		Vertice<K, V> e = getVertex(idVertex);
 		return ("''"+e.darID()+"'':{ \n"+"''lat'':"+e.darInfo()+", \n"+"''lon'':"+e.darInfo()+"''adj'':"+adj(e.darID())+"\n }");
 	}
 	
-	public ArrayList<Arco<K, V, A>> caminoMasCorto(Vertice<K, V> ini, Vertice<K, V> fin){
-		ArrayList<Arco<K, V, A>> arcos = darArcos(ini.darID());
-		ArrayList<Arco<K, V, A>> mins = new ArrayList<>();
-		Arco<K, V, A> min = null;
-		for(int i =0;i<arcos.size();i++){
-			if (arcos.get(i).darInfoArco()<min.darInfoArco()){
-				min = arcos.get(i);
-				mins.add(min);
-			}
-		}
-		
-		return mins;
-	}
+	
 	
 	// esoto va en elJson
 //	  {

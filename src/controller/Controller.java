@@ -18,7 +18,7 @@ import model.violations.GraphInfo;
 import model.violations.VOMovingViolation;
 import view.View;
 
-public class Controller {
+public class Controller<K, V> {
 
 	Queue<VOMovingViolation> cola;
 	// Componente vista (consola)
@@ -410,8 +410,11 @@ public class Controller {
 	 * Requerimiento 2C: Calcular un ï¿½rbol de expansiï¿½n mï¿½nima (MST) con criterio distancia, utilizando el algoritmo de Prim. (REQ 2C)
 	 */
 	public void arbolMSTPrimC2() {
-		// TODO Auto-generated method stub
-
+		LinkedList<Vertice<K, V>> visitados = new LinkedList<>();
+		Vertice<K, V> prim = grafo.darRaiz();
+		grafo.darArcos(prim);
+	
+	
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
