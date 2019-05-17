@@ -1,6 +1,7 @@
 package model.estructuras;
 
-public class Arco<K, V, A> {
+
+public class Arco<K, V, A> implements Comparable<Arco<K, V, A>>{
 
 	// -----------------------------------------------------------------
 	// Atributos
@@ -71,6 +72,17 @@ public class Arco<K, V, A> {
 
 	public void setInf(A pInf){
 		infoArco=pInf;
+	}
+
+	@Override
+	public int compareTo(Arco<K, V, A> arg0) {
+		if((double)this.infoArco<(double)arg0.infoArco){
+			return -1;
+		}
+		else if((double)this.infoArco==(double)arg0.infoArco){
+			return 0;
+		}
+		else{return 1;}
 	}
 
 }

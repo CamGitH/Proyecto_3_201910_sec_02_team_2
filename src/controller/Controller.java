@@ -5,27 +5,31 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 
+import model.estructuras.Arco;
+import model.estructuras.ColaPrioridadHeap;
 import model.estructuras.Graph;
 import model.estructuras.LinkedList;
+import model.estructuras.NodoLinkedList;
 import model.estructuras.Queue;
 import model.estructuras.Vertice;
 import model.violations.GraphInfo;
 import model.violations.VOMovingViolation;
 import view.View;
 
-public class Controller<K, V> {
+public class Controller<K, V, A> {
 
 	Queue<VOMovingViolation> cola;
 	// Componente vista (consola)
 	private View view;
 
 	private Graph grafo;
-	
+
 	LinkedList<VOMovingViolation> listaEncadenda;
 
 	//TODO Definir los atributos de estructuras de datos del modelo del mundo del proyecto
@@ -69,10 +73,10 @@ public class Controller<K, V> {
 				String RutaArchivo = "";
 				view.printMessage("Escoger el grafo a cargar: (1) Downtown  o (2)Ciudad Completa.");
 				int ruta = sc.nextInt();
-				if(ruta == 1)
-					RutaArchivo = ""; //TODO Dar la ruta del archivo de Downtown
+				if(ruta == 0)
+					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de Downtown
 				else
-					RutaArchivo = ""; //TODO Dar la ruta del archivo de la ciudad completa
+					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de la ciudad completa
 
 				startTime = System.currentTimeMillis();
 				loadJSON(RutaArchivo);
@@ -80,8 +84,10 @@ public class Controller<K, V> {
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
 				// TODO Informar el total de vÃ©rtices y el total de arcos que definen el grafo cargado
-				break;
 
+				System.out.println("Vertices"+grafo.darListaNodos().size());
+				System.out.println("Arcos "+grafo.darListaArcos().size());
+				break;
 
 
 			case 1:
@@ -278,74 +284,80 @@ public class Controller<K, V> {
 
 		try {
 
-			reader = new JsonReader(new FileReader("./data/finalGraph.json"));
+			reader = new JsonReader(new FileReader(rutaArchivo));
 			readFilesJson(gson, reader);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("termino");
 	}
 
 
 
 	private void readFilesJson(Gson pGson, JsonReader pReader){
 		GraphInfo[] lista = pGson.fromJson(pReader, GraphInfo[].class);
-		System.out.println(lista.length);
 		for(int i = 0; i<lista.length;i++){
 
-			if(!(lista[i].getAdj().length==0)){
-				for(int j = 0; j<lista[i].getAdj().length;j++){
-					double peso = 0;
-					double latitud = lista[i].getLat();
-					double longitud = lista[i].getLon();
-					double latitud2 = 0;
-					double longitud2 = 0;
-					boolean encontro = true;
-					for(int k = 0; k<lista.length && encontro;k++){
-						if(lista[k].getId()==lista[i].getId()){
-							latitud2 = lista[k].getLat();
-							longitud2 = lista[k].getLon();
-							encontro = false;
-						}
-						
+			for(int j = 0; j<lista[i].getAdj().length;j++){
+				double peso = 0;
+				double latitud = lista[i].getLat();
+				double longitud = lista[i].getLon();
+				double latitud2 = 0;
+				double longitud2 = 0;
+				boolean encontro = false;
+				int adyacente = 0;
+				for(int k = 0; k<lista.length && !encontro;k++){
+					if(lista[k].getId()==lista[i].getId()){
+						latitud2 = lista[k].getLat();
+						longitud2 = lista[k].getLon();
+						encontro = true;
+						adyacente = j;
 					}
+
+				}
+				if(encontro){
 					peso = distance(latitud, latitud2, longitud, longitud2, 0.0, 0.0);
-					
 					try {
-						grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
+						grafo.addEdge(lista[i].getId(), lista[i].getAdj()[adyacente],peso);
 					} catch (Exception e) {
+						
 						e.printStackTrace();
 					}
 				}
-				
-				Vertice<K, V> = new Vertice<>()
-				grafo.addVertex(lista[i].getId(), infoVertex);
-				
-				
 			}
 
+			try {
+				grafo.addVertex(lista[i].getId(), lista[i]);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+		
 		}
-
+		
+		System.out.println("error");
 	}
-	
+
 	public static double distance(double lat1, double lat2, double lon1,
-	        double lon2, double el1, double el2) {
+			double lon2, double el1, double el2) {
 
-	    final int R = 6371; // Radius of the earth
+		final int R = 6371; // Radius of the earth
 
-	    double latDistance = Math.toRadians(lat2 - lat1);
-	    double lonDistance = Math.toRadians(lon2 - lon1);
-	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-	            + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-	            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	    double distance = R * c * 1000000; // convert to km
+		double latDistance = Math.toRadians(lat2 - lat1);
+		double lonDistance = Math.toRadians(lon2 - lon1);
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+				+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+				* Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double distance = R * c * 1000000; // convert to km
 
-	    double height = el1 - el2;
+		double height = el1 - el2;
 
-	    distance = Math.pow(distance, 2) + Math.pow(height, 2);
+		distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-	    return Math.sqrt(distance);
+		return Math.sqrt(distance);
+		
 	}
 
 
@@ -408,13 +420,44 @@ public class Controller<K, V> {
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
 	/**
 	 * Requerimiento 2C: Calcular un ï¿½rbol de expansiï¿½n mï¿½nima (MST) con criterio distancia, utilizando el algoritmo de Prim. (REQ 2C)
+	 * @return 
 	 */
-	public void arbolMSTPrimC2() {
+	public Stack<Arco<K, V, A>> arbolMSTPrimC2() {
+		Stack<Arco<K, V, A>> ret = new Stack<>();
 		LinkedList<Vertice<K, V>> visitados = new LinkedList<>();
+		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
 		Vertice<K, V> prim = grafo.darRaiz();
-		grafo.darArcos(prim);
-	
-	
+		LinkedList<Arco<K, V, A>> gra1 = grafo.darArcos(prim);
+		NodoLinkedList<Arco<K, V, A>> arco = gra1.darPrimero();
+		for(int i=0;i<gra1.getSize();i++){
+			cola.insert(arco.darElemento());
+			arco = arco.darSiguiente();
+		}
+		grafo.darRaiz().marcar();
+		int marcados=1;
+		while(marcados<grafo.darListaNodos().size()){
+			Arco<K, V, A> min = cola.delMax();
+			ret.push(min);
+			double n = (double) min.darVerticeDestino();
+			if(grafo.getVertex(n).estaMarcado()){
+				continue;
+			}
+			else{
+				LinkedList<Arco<K, V, A>> gra2 = grafo.darArcos(n);
+				NodoLinkedList<Arco<K, V, A>> arco2 = gra2.darPrimero();
+				for(int i=0;i<gra1.getSize();i++){
+					cola.insert(arco.darElemento());
+					arco = arco.darSiguiente();
+				}
+				marcados++;
+				grafo.getVertex(n).marcar();
+			}
+			if(cola.size()<=0){
+				break;
+			}
+		}
+		System.out.println("si el tamano es 0 esta mal"+cola.size());
+		return ret;
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
