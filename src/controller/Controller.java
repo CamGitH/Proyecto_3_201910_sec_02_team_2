@@ -21,7 +21,7 @@ public class Controller {
 	Queue<VOMovingViolation> cola;
 	// Componente vista (consola)
 	private View view;
-	
+
 	private Graph grafo;
 
 	//TODO Definir los atributos de estructuras de datos del modelo del mundo del proyecto
@@ -86,7 +86,7 @@ public class Controller {
 				view.printMessage("Ingrese El id del segundo vertice (Ej. 901839): ");
 				idVertice2 = sc.nextInt();
 
-				
+
 				startTime = System.currentTimeMillis();
 				caminoCostoMinimoA1(idVertice1, idVertice2);
 				endTime = System.currentTimeMillis();
@@ -105,7 +105,7 @@ public class Controller {
 				view.printMessage("2A. Consultar los N vï¿½rtices con mayor nï¿½mero de infracciones. Ingrese el valor de N: ");
 				int n = sc.nextInt();
 
-				
+
 				startTime = System.currentTimeMillis();
 				mayorNumeroVerticesA2(n);
 				endTime = System.currentTimeMillis();
@@ -129,7 +129,7 @@ public class Controller {
 				view.printMessage("Ingrese El id del segundo vertice (Ej. 901839): ");
 				idVertice2 = sc.nextInt();
 
-				
+
 				startTime = System.currentTimeMillis();
 				caminoLongitudMinimoaB1(idVertice1, idVertice2);
 				endTime = System.currentTimeMillis();
@@ -163,7 +163,7 @@ public class Controller {
 				view.printMessage("Ingrese el nï¿½mero de filas");
 				int filas = sc.nextInt();
 
-				
+
 				startTime = System.currentTimeMillis();
 				definirCuadriculaB2(lonMin,lonMax,latMin,latMax,columnas,filas);
 				endTime = System.currentTimeMillis();
@@ -180,7 +180,7 @@ public class Controller {
 				break;
 
 			case 5:
-				
+
 				startTime = System.currentTimeMillis();
 				arbolMSTKruskalC1();
 				endTime = System.currentTimeMillis();
@@ -196,7 +196,7 @@ public class Controller {
 				break;
 
 			case 6:
-				
+
 				startTime = System.currentTimeMillis();
 				arbolMSTPrimC2();
 				endTime = System.currentTimeMillis();
@@ -211,7 +211,7 @@ public class Controller {
 				break;
 
 			case 7:
-				
+
 				startTime = System.currentTimeMillis();
 				caminoCostoMinimoDijkstraC3();
 				endTime = System.currentTimeMillis();
@@ -230,7 +230,7 @@ public class Controller {
 				idVertice1 = sc.nextInt();
 				view.printMessage("Ingrese El id del segundo vertice (Ej. 901839): ");
 				idVertice2 = sc.nextInt();
-				
+
 				startTime = System.currentTimeMillis();
 				caminoMasCortoC4(idVertice1, idVertice2);
 				endTime = System.currentTimeMillis();
@@ -247,7 +247,7 @@ public class Controller {
 				fin = true;
 				sc.close();
 				break;
-				
+
 			case 10:
 				this.loadMovingViolations(1);
 				System.out.println(cola.size());
@@ -256,8 +256,8 @@ public class Controller {
 			}
 		}
 	}
-	
-	
+
+
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
 
 
@@ -280,29 +280,29 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	
+
+
+
 	private void readFilesJson(Gson pGson, JsonReader pReader){
 		GraphInfo[] lista = pGson.fromJson(pReader, GraphInfo[].class);
 		System.out.println(lista.length);
 		for(int i = 0; i<lista.length;i++){
-			
+
 			if(!(lista[i].getAdj().length==0)){
 				for(int j = 0; j<lista[i].getInfractions().length;j++){
 					double peso = 0;
 					double latitud = lista[i].getLat();
 					double longitud = lista[i].getLon();
-					long 
 					
 					
-				grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
-				}
-			
 
+					grafo.addEdge(lista[i].getId(), lista[i].getAdj()[i], peso);
+				}
 			}
+
 		}
-		System.out.println("-------------------");
+
 	}
-}
 
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -379,7 +379,7 @@ public class Controller {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
 	/**
 	 * Requerimiento 4C:Encontrar el camino mï¿½s corto para un viaje entre dos ubicaciones geogrï¿½ficas escogidas aleatoriamente al interior del grafo.
@@ -451,7 +451,7 @@ public class Controller {
 				ss=list.size();
 				e="Junio";
 				list.clear();
-				
+
 				break;
 
 
@@ -497,7 +497,7 @@ public class Controller {
 				s=list.size();
 				i="Noviembre";
 				list.clear();
-				
+
 				reader2 = new CSVReader(new FileReader("./data/December_wgs84.csv"),';');
 				//reader=new CSVReaderBuilder(new FileReader("./data/December_wgs84.csv")).withSkipLines(1).build();
 				list = reader2.readAll();
@@ -522,11 +522,11 @@ public class Controller {
 				,cuatro+" datos cargados en "+c+"."
 				,s+ " datos cargados en "+i+"."
 				,ss+" datos cargados en "+e+"."};
-		
+
 		for(int j = 0; j<infraccionesPorMes.length;j++){
 			System.out.println(infraccionesPorMes[j]);
 		}
-		
+
 
 
 	}
@@ -534,10 +534,10 @@ public class Controller {
 	public void readFiles(List<String[]> list){
 
 		for(int i = 0;i<list.size()/10;i++){
-			
+
 			VOMovingViolation infraccion = new VOMovingViolation(
-					
-					
+
+
 					list.get(i)[1], //ID
 					list.get(i)[3], //Loc
 					list.get(i)[15], //Date
@@ -553,7 +553,7 @@ public class Controller {
 
 
 			cola.enqueue(infraccion);
-			
+
 
 		}
 
