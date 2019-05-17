@@ -179,6 +179,20 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 		return ("''"+e.darID()+"'':{ \n"+"''lat'':"+e.darInfo()+", \n"+"''lon'':"+e.darInfo()+"''adj'':"+adj(e.darID())+"\n }");
 	}
 	
+	public ArrayList<Arco<K, V, A>> caminoMasCorto(Vertice<K, V> ini, Vertice<K, V> fin){
+		ArrayList<Arco<K, V, A>> arcos = darArcos(ini.darID());
+		ArrayList<Arco<K, V, A>> mins = new ArrayList<>();
+		Arco<K, V, A> min = null;
+		for(int i =0;i<arcos.size();i++){
+			if (arcos.get(i).darInfoArco()<min.darInfoArco()){
+				min = arcos.get(i);
+				mins.add(min);
+			}
+		}
+		
+		return mins;
+	}
+	
 	// esoto va en elJson
 //	  {
 //	        "id": "3030277953",
@@ -196,9 +210,9 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 //	          "13237865"] 
 //	    }
 	
-	public String pasaraJSON(Vertice<K, V>){
-		
-	}
+//	public String pasaraJSON(Vertice<K, V>){
+//		
+//	}
 	
 	
 	
