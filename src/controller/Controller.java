@@ -411,20 +411,44 @@ public class Controller<K, V, A> {
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
 	/**
 	 * Requerimiento 1C:  Calcular un ï¿½rbol de expansiï¿½n mï¿½nima (MST) con criterio distancia, utilizando el algoritmo de Kruskal.
+	 * @return 
 	 */
-	public void arbolMSTKruskalC1() {
-		// TODO Auto-generated method stub
-
+	public Stack<Arco<K, V, A>> arbolMSTKruskalC1() {
+		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
+		Stack<Arco<K, V, A>> ret = new Stack<>();
+		int marcados=1;
+		while(marcados<grafo.darListaNodos().size()){
+			Arco<K, V, A> min = cola.delMax();
+			if(!(grafo.getVertex(min.darVerticeOrigen()).estaMarcado())&&!(grafo.getVertex(min.darVerticeDestino()).estaMarcado())){
+				ret.push(min);
+				grafo.getVertex(min.darVerticeDestino()).marcar();
+				marcados++;
+				grafo.getVertex(min.darVerticeOrigen()).marcar();
+				marcados++;
+			}
+			else if((grafo.getVertex(min.darVerticeOrigen()).estaMarcado())&&!(grafo.getVertex(min.darVerticeDestino()).estaMarcado())){
+				ret.push(min);
+				grafo.getVertex(min.darVerticeDestino()).marcar();
+				marcados++;
+			}
+			else if(!(grafo.getVertex(min.darVerticeOrigen()).estaMarcado())&&(grafo.getVertex(min.darVerticeDestino()).estaMarcado())){
+				ret.push(min);
+				grafo.getVertex(min.darVerticeOrigen()).marcar();
+				marcados++;
+			}
+			else{continue;}
+			
+		}
+		return ret;
 	}
 
-	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
+	
 	/**
 	 * Requerimiento 2C: Calcular un ï¿½rbol de expansiï¿½n mï¿½nima (MST) con criterio distancia, utilizando el algoritmo de Prim. (REQ 2C)
 	 * @return 
 	 */
 	public Stack<Arco<K, V, A>> arbolMSTPrimC2() {
 		Stack<Arco<K, V, A>> ret = new Stack<>();
-		LinkedList<Vertice<K, V>> visitados = new LinkedList<>();
 		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
 		Vertice<K, V> prim = grafo.darRaiz();
 		LinkedList<Arco<K, V, A>> gra1 = grafo.darArcos(prim);
@@ -460,11 +484,7 @@ public class Controller<K, V, A> {
 		return ret;
 	}
 
-	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
-	/**
-	 * Requerimiento 3C: Calcular los caminos de costo mï¿½nimo con criterio distancia que conecten los vï¿½rtices resultado
-	 * de la aproximaciï¿½n de las ubicaciones de la cuadricula N x M encontrados en el punto 5.
-	 */
+	
 	public void caminoCostoMinimoDijkstraC3() {
 		// TODO Auto-generated method stub
 
