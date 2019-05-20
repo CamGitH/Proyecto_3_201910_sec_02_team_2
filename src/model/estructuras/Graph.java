@@ -99,16 +99,7 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 		return ret;
 	}
 	
-	public Arco<K, V, A> menorDeLos(LinkedList<Arco<K, V, A>> de){
-		Arco<K, V, A> min = de.get(0).darElemento();
-		for (int i=0; i<de.getSize();i++){
-			
-			if(de.get(i).darElemento().darInfoArco()<min.darInfoArco()){
-				
-			}
-		}
-		
-	}
+	
 	/*
 	 * Obtener la información de un vértice
 	 */
