@@ -98,6 +98,8 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 		}
 		return ret;
 	}
+	
+	
 	/*
 	 * Obtener la información de un vértice
 	 */

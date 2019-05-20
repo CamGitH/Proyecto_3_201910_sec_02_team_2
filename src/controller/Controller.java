@@ -504,9 +504,44 @@ public class Controller<K, V, A> {
 	}
 
 
-	public void caminoCostoMinimoDijkstraC3() {
-		// TODO Auto-generated method stub
+	public Stack<Arco<K, V, A>> caminoCostoMinimoDijkstraC3(Vertice<K, V> desde ) {
 
+		Stack<Arco<K, V, A>> ret = new Stack<>();
+		LinkedList<Arco<K, V, A>> arcossolos = grafo.darArcos(desde);
+		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
+		
+		int marcados=0;
+		while(marcados<grafo.darListaNodos().size()){
+			while(cola.size()!=0){
+				cola.delMax();
+			}
+			LinkedList<Arco<K, V, A>> lista = grafo.darArcos(desde.darID());
+			
+			for(int i=0;i<lista.getSize();i++){
+				cola.insert(lista.get(i).darElemento());
+			}
+			Arco<K, V, A> min = cola.delMax();
+			boolean ya = false;
+			while(!ya){
+				if (grafo.getVertex(min.darVerticeDestino()).estaMarcado()||grafo.getVertex(min.darVerticeOrigen()).estaMarcado()){
+					min=cola.delMax();
+				}else{ya=true;}
+			}
+			if(min.darVerticeDestino()==desde){
+				grafo.getVertex(min.darVerticeDestino()).marcar();
+				marcados++;
+				ret.add(min);
+				desde=grafo.getVertex(min.darVerticeOrigen());
+				
+			}
+			else if(min.darVerticeOrigen()==desde){
+				grafo.getVertex(min.darVerticeOrigen()).marcar();
+				marcados++;
+				ret.add(min);
+				desde=grafo.getVertex(min.darVerticeDestino());
+			}
+		}	
+		return ret;
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
