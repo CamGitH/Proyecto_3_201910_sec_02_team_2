@@ -13,6 +13,7 @@ import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 
 import model.estructuras.Arco;
+import model.estructuras.ArregloDinamico;
 import model.estructuras.ColaPrioridadHeap;
 import model.estructuras.Graph;
 import model.estructuras.LinkedList;
@@ -417,7 +418,34 @@ public class Controller<K, V, A> {
 	 */
 	public void definirCuadriculaB2(double lonMin, double lonMax, double latMin, double latMax, int columnas,
 			int filas) {
-		// TODO Auto-generated method stub
+		double distanciaHorinzontal = (latMax-latMin)/columnas-1;
+		double distanciaVertical = (lonMax-lonMin)/filas-1;
+		
+		double latitudMax = latMax;
+		double latitudMin = latMin;
+		
+		double longitudMax = lonMax;
+		double longitudMin = lonMin;
+		
+		ArregloDinamico<Double[]> arreglo = new ArregloDinamico<>(10);
+		for(int i = 0; i < filas;i++){
+			for ( int j = 0; j < columnas; j++){
+				Double[] datos = {0.0,0.0};
+				datos[0] = latitudMax;
+				datos[1] = longitudMin;
+				arreglo.agregar(datos);
+				longitudMin += distanciaHorinzontal;
+			}
+			latitudMax -= distanciaVertical;
+			longitudMin = lonMin;
+		}
+		Queue<Vertice<K, V>> cola = new Queue<>();
+		for(int i = 0; i<grafo.darListaNodos().size();i++){
+			Vertice<K, V> vertice = (Vertice<K, V>) grafo.darListaNodos().get(i);
+			if(vertice.darInfo())
+		}
+		
+		
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
