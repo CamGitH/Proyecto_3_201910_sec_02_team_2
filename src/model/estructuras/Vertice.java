@@ -1,16 +1,18 @@
 package model.estructuras;
 
+import model.violations.GraphInfo;
+
 public class Vertice<K, V> {
 
 	private K id;
-	private V infoVertice;
+	private GraphInfo infoVertice;
 	boolean marcado;
 	int numeroArcos =0;
 	
 	
 	
 	
-	public void Vertice( K pId , V pInfoVertice)
+	public void Vertice( K pId , GraphInfo pInfoVertice)
 	{
 	id = pId;
 	numeroArcos=0;
@@ -23,7 +25,7 @@ public class Vertice<K, V> {
 		return id;
 	}
 	
-	public V darInfo(){
+	public GraphInfo darInfo(){
 		return infoVertice;
 	}
 	
@@ -31,7 +33,7 @@ public class Vertice<K, V> {
 //		return info2;
 //	}
 	
-	public void cambiarInfo(V pInf){
+	public void cambiarInfo(GraphInfo pInf){
 		infoVertice = pInf;
 	}
 	

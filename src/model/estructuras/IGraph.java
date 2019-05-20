@@ -3,6 +3,8 @@ package model.estructuras;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import model.violations.GraphInfo;
+
 public interface IGraph<K, V, A> {
 	
 	int V();
@@ -13,7 +15,7 @@ public interface IGraph<K, V, A> {
 	
 	void addEdge(K idVertexIni, K idVertexFin, A infoArc ) throws Exception;
 	
-	V getInfoVertex(K idVertex);
+	GraphInfo getInfoVertex(K idVertex);
 	
 	void setInfoVertex(K idVertex, V infoVertex);
 	

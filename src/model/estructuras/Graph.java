@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javafx.scene.shape.Arc;
+import model.violations.GraphInfo;
 
 public class Graph<K,V,A> implements IGraph<K, V, A> {
 
@@ -46,7 +47,7 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 	 * Adiciona un vértice con un Id único.
 	 * El vértice tiene la información InfoVertex
 	 */
-	public void addVertex(K idVertex, V infoVertex) throws Exception {
+	public void addVertex(K idVertex, GraphInfo infoVertex) throws Exception {
 		if(v==0){
 			Vertice<K, V> a = new Vertice<>();
 			a.cambiarInfo(infoVertex);
@@ -103,7 +104,7 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 	/*
 	 * Obtener la información de un vértice
 	 */
-	public V getInfoVertex(K idVertex) {
+	public GraphInfo getInfoVertex(K idVertex) {
 		for(int cont =0; cont<=v-1; cont ++){
 			if(nodos.get(cont).darID()== idVertex){
 				return nodos.get(cont).darInfo();
@@ -115,7 +116,7 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 	/*
 	 * Modificar la información del vértice 
 	 */
-	public void setInfoVertex(K idVertex, V infoVertex) {
+	public void setInfoVertex(K idVertex, GraphInfo infoVertex) {
 		for(int cont =0; cont<=v-1; cont ++){
 			if(nodos.get(cont)== idVertex){
 				nodos.get(cont).cambiarInfo(infoVertex);
@@ -187,6 +188,18 @@ public class Graph<K,V,A> implements IGraph<K, V, A> {
 	public String toString(K idVertex){
 		Vertice<K, V> e = getVertex(idVertex);
 		return ("''"+e.darID()+"'':{ \n"+"''lat'':"+e.darInfo()+", \n"+"''lon'':"+e.darInfo()+"''adj'':"+adj(e.darID())+"\n }");
+	}
+
+	@Override
+	public void addVertex(K idVertex, V infoVertex) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setInfoVertex(K idVertex, V infoVertex) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
