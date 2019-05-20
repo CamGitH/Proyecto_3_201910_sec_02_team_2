@@ -486,9 +486,21 @@ public class Controller<K, V, A> {
 	}
 
 
-	public void caminoCostoMinimoDijkstraC3() {
-		// TODO Auto-generated method stub
+	public void caminoCostoMinimoDijkstraC3(Vertice<K, V> desde ) {
 
+		Stack<Arco<K, V, A>> ret = new Stack<>();
+		LinkedList<Arco<K, V, A>> arcossolos = grafo.darArcos(desde);
+		
+		int marcados=1;
+		while(marcados<grafo.darListaNodos().size()){
+			
+			LinkedList lista = grafo.darArcos(desde.darID());
+			Arco<K, V, A> min = grafo.menorDeLos(lista);
+			if(min.darVerticeDestino()==desde){
+			}
+			else if(min.darVerticeOrigen()==desde){
+			}
+		}		
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
