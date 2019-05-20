@@ -3,6 +3,7 @@ package controller;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
@@ -290,53 +291,53 @@ public class Controller<K, V, A> {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("termino");
+		System.out.println("termino!");
 	}
 
 
 
 	private void readFilesJson(Gson pGson, JsonReader pReader){
 		GraphInfo[] lista = pGson.fromJson(pReader, GraphInfo[].class);
-		for(int i = 0; i<lista.length;i++){
+		Hashtable<Long, GraphInfo> table = new Hashtable<>();
+		for (int i = 0; i < lista.length; i++) {
+			long key = lista[i].getId();
+			table.put(key, lista[i]);
 
-			for(int j = 0; j<lista[i].getAdj().length;j++){
-				double peso = 0;
-				double latitud = lista[i].getLat();
-				double longitud = lista[i].getLon();
-				double latitud2 = 0;
-				double longitud2 = 0;
-				boolean encontro = false;
-				int adyacente = 0;
-				for(int k = 0; k<lista.length && !encontro;k++){
-					if(lista[k].getId()==lista[i].getId()){
-						latitud2 = lista[k].getLat();
-						longitud2 = lista[k].getLon();
-						encontro = true;
-						adyacente = j;
-					}
+		}
+		for(int i = 0; i<lista.length/20;i++){
+			long[] listaAdj = lista[i].getAdj();
 
-				}
-				if(encontro){
-					peso = distance(latitud, latitud2, longitud, longitud2, 0.0, 0.0);
+			if(listaAdj.length!=0){
+
+				for(int j = 0; j<listaAdj.length;j++){
+
+					
+					GraphInfo info = table.get(listaAdj[j]);
+					if(info!=null){
+
+					double peso = distance(lista[i].getLat(), info.getLat(), lista[i].getLon(), info.getLon(), 0.0, 0.0);
 					try {
-						grafo.addEdge(lista[i].getId(), lista[i].getAdj()[adyacente],peso);
+						grafo.addEdge(lista[i].getId(), listaAdj[j],peso);
 					} catch (Exception e) {
-						
+
 						e.printStackTrace();
 					}
+
 				}
+					
+				}
+
+				try {
+					grafo.addVertex(lista[i].getId(), lista[i]);
+				} catch (Exception e) {
+
+					e.printStackTrace();
+				}
+
 			}
 
-			try {
-				grafo.addVertex(lista[i].getId(), lista[i]);
-			} catch (Exception e) {
-				
-				e.printStackTrace();
-			}
-		
 		}
-		
-		System.out.println("error");
+
 	}
 
 	public static double distance(double lat1, double lat2, double lon1,
@@ -357,7 +358,7 @@ public class Controller<K, V, A> {
 		distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
 		return Math.sqrt(distance);
-		
+
 	}
 
 
@@ -437,12 +438,12 @@ public class Controller<K, V, A> {
 				marcados++;
 			}
 			else{continue;}
-			
+
 		}
 		return ret;
 	}
 
-	
+
 	/**
 	 * Requerimiento 2C: Calcular un �rbol de expansi�n m�nima (MST) con criterio distancia, utilizando el algoritmo de Prim. (REQ 2C)
 	 * @return 
@@ -484,7 +485,7 @@ public class Controller<K, V, A> {
 		return ret;
 	}
 
-	
+
 	public void caminoCostoMinimoDijkstraC3() {
 		// TODO Auto-generated method stub
 
