@@ -75,7 +75,7 @@ public class Controller<K, V, A> {
 				view.printMessage("Escoger el grafo a cargar: (1) Downtown  o (2)Ciudad Completa.");
 				int ruta = sc.nextInt();
 				if(ruta == 0)
-					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de Downtown
+					RutaArchivo = "./data/grafo.json"; //TODO Dar la ruta del archivo de Downtown
 				else
 					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de la ciudad completa
 
@@ -305,6 +305,7 @@ public class Controller<K, V, A> {
 
 		}
 		for(int i = 0; i<lista.length/20;i++){
+			System.out.println(i);
 			long[] listaAdj = lista[i].getAdj();
 
 			if(listaAdj.length!=0){
@@ -327,16 +328,26 @@ public class Controller<K, V, A> {
 					
 				}
 
-				try {
-					grafo.addVertex(lista[i].getId(), lista[i]);
-				} catch (Exception e) {
-
-					e.printStackTrace();
-				}
+//				try {
+//					grafo.addVertex(lista[i].getId(), lista[i]);
+//				} catch (Exception e) {
+//
+//					e.printStackTrace();
+//				}
 
 			}
 
 		}
+		for (int i = 0; i < lista.length; i++) {
+			try {
+				System.out.println(i);
+				grafo.addVertex(lista[i].getId(), lista[i]);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+		}
+		
 
 	}
 
@@ -416,11 +427,17 @@ public class Controller<K, V, A> {
 	 */
 	public Stack<Arco<K, V, A>> arbolMSTKruskalC1() {
 		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
+		ArrayList<Arco<K, V, A>> arcos = grafo.darListaArcos();
+		for (int i = 0; i < arcos.size(); i++) {
+			cola.insert(arcos.get(i));
+		}
 		Stack<Arco<K, V, A>> ret = new Stack<>();
 		int marcados=1;
 		while(marcados<grafo.darListaNodos().size()){
 			Arco<K, V, A> min = cola.delMax();
-			if(!(grafo.getVertex(min.darVerticeOrigen()).estaMarcado())&&!(grafo.getVertex(min.darVerticeDestino()).estaMarcado())){
+			System.out.println(min.darVerticeOrigen());
+			if(!(grafo.getVertex(min.darVerticeOrigen()).estaMarcado())
+					&&!(grafo.getVertex(min.darVerticeDestino()).estaMarcado())){
 				ret.push(min);
 				grafo.getVertex(min.darVerticeDestino()).marcar();
 				marcados++;
@@ -440,6 +457,7 @@ public class Controller<K, V, A> {
 			else{continue;}
 
 		}
+		System.out.println(ret.size());
 		return ret;
 	}
 
