@@ -1,14 +1,12 @@
 package view;
 
-import java.beans.VetoableChangeListener;
-
-import com.teamdev.jxmaps.LatLng;
+import java.util.Stack;
 
 import model.estructuras.Queue;
 import model.estructuras.Vertice;
-import model.violations.GraphInfo;
 
-public class View {
+
+public class View<K, V, A> {
 
 	public void printMenu() {
 		System.out.println("---------ISIS 1206 - Estructuras de datos----------");
@@ -41,22 +39,21 @@ public class View {
 //	uno de estos vértices.
 //	Visualización mapa: Marque las ubicaciones de los vértices resultantes de la
 //	aproximación de la cuadrícula en Google Maps.
-	public void printB1(Queue<Vertice<Long, GraphInfo>> cola){
-		System.out.println("Numero de vertices de la aproximación: "+ cola.size());
-		int n = 0;
-		for (int i = 0; i < cola.size(); i++) {
-			Vertice<Long, GraphInfo> vertice = cola.dequeue();
+	public void printB2(Queue<Vertice<K, V>> queue){
+		System.out.println("Numero de vertices de la aproximación: "+ queue.size());
+		for (int i = 0; i < queue.size(); i++) {
+			Vertice<K, V> vertice = queue.dequeue();
 			System.out.println("ID: "+vertice.darID());
 			System.out.println("Latitud: "+vertice.darInfo().getLat());
 			System.out.println("Longitud: "+vertice.darInfo().getLon());
 			System.out.println("String con el poligono a dibujar en el mapa:\n");
-			Vertice<Long, GraphInfo> verticeSacado = cola.dequeue();
+			Vertice<K, V> verticeSacado = queue.dequeue();
 			System.out.println("{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
-			for(int j = 0; j< cola.size()-1;j++){
-				verticeSacado = cola.dequeue();
+			for(int j = 0; j< queue.size()-1;j++){
+				verticeSacado = queue.dequeue();
 				System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
 			}
-			verticeSacado = cola.dequeue();
+			verticeSacado = queue.dequeue();
 			System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")}");
 //			{new LatLng(25.774, -80.190),
 //                new LatLng(18.466, -66.118),
@@ -64,5 +61,51 @@ public class View {
 //                new LatLng(25.774, -80.190)};
 		}
 	}
+	
+	public void printB1(Queue<Vertice<K, V>> queue){
+		System.out.println("Numero de vertices de la aproximación: "+ queue.size());
+		for (int i = 0; i < queue.size(); i++) {
+			Vertice<K, V> vertice = queue.dequeue();
+			System.out.println("ID: "+vertice.darID());
+			System.out.println("Latitud: "+vertice.darInfo().getLat());
+			System.out.println("Longitud: "+vertice.darInfo().getLon());
+			System.out.println("String con el poligono a dibujar en el mapa:\n");
+			Vertice<K, V> verticeSacado = queue.dequeue();
+			System.out.println("{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
+			for(int j = 0; j< queue.size()-1;j++){
+				verticeSacado = queue.dequeue();
+				System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
+			}
+			verticeSacado = queue.dequeue();
+			System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")}");
+//			{new LatLng(25.774, -80.190),
+//                new LatLng(18.466, -66.118),
+//                new LatLng(32.321, -64.757),
+//                new LatLng(25.774, -80.190)};
+		}
+	}
+	public void printC3(Stack<Vertice<K, V>> stack){
+		System.out.println("Numero de vertices de la aproximación: "+ stack.size());
+		for (int i = 0; i < stack.size(); i++) {
+			Vertice<K, V> vertice = stack.pop();
+			System.out.println("ID: "+vertice.darID());
+			System.out.println("Latitud: "+vertice.darInfo().getLat());
+			System.out.println("Longitud: "+vertice.darInfo().getLon());
+			System.out.println("String con el poligono a dibujar en el mapa:\n");
+			Vertice<K, V> verticeSacado = stack.pop();
+			System.out.println("{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
+			for(int j = 0; j< stack.size()-1;j++){
+				verticeSacado = stack.pop();
+				System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")");
+			}
+			verticeSacado = stack.pop();
+			System.out.println(",{new LatLng("+verticeSacado.darInfo().getLat()+", "+verticeSacado.darInfo().getLon()+")}");
+//			{new LatLng(25.774, -80.190),
+//                new LatLng(18.466, -66.118),
+//                new LatLng(32.321, -64.757),
+//                new LatLng(25.774, -80.190)};
+		}
+	}
+	
 	
 }

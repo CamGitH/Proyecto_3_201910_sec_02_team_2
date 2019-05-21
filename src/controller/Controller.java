@@ -144,7 +144,7 @@ public class Controller<K, V, A> {
 
 
 				startTime = System.currentTimeMillis();
-				caminoLongitudMinimoaB1(idVertice1, idVertice2);
+				view.printB1(caminoLongitudMinimoaB1(idVertice1, idVertice2));
 				endTime = System.currentTimeMillis();
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
@@ -178,7 +178,7 @@ public class Controller<K, V, A> {
 
 
 				startTime = System.currentTimeMillis();
-				definirCuadriculaB2(lonMin,lonMax,latMin,latMax,columnas,filas);
+				view.printB2(definirCuadriculaB2(lonMin,lonMax,latMin,latMax,columnas,filas);
 				endTime = System.currentTimeMillis();
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
@@ -226,7 +226,7 @@ public class Controller<K, V, A> {
 			case 7:
 
 				startTime = System.currentTimeMillis();
-				caminoCostoMinimoDijkstraC3(null);
+				view.printC3(caminoCostoMinimoDijkstraC3(null));
 				endTime = System.currentTimeMillis();
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
@@ -422,24 +422,31 @@ public class Controller<K, V, A> {
 	 * @param idVertice2 
 	 * @param idVertice1 
 	 */
-	public void caminoLongitudMinimoaB1(long idVertice1, long idVertice2) {
+	public Queue<Vertice<K, V>> caminoLongitudMinimoaB1(long idVertice1, long idVertice2) {
 		//BFS
 		Long dist = 0L;
+		Queue<Vertice<K, V>> ret = new Queue<Vertice<K,V>>();
 		Queue<Vertice<K, V>> cola = new Queue<>();
 		ArregloDinamico<Long[]> arreglo = new ArregloDinamico<>(10);
 		Vertice<K, V> v = grafo.getVertex(idVertice1);
 		cola.enqueue(v);
 		Long[] datos = {v.darInfo().getId(),dist,0L};
 		arreglo.agregar(datos);
-		buscar(cola, idVertice2, dist, arreglo);
-
+		ret = buscar(cola, idVertice2, dist, arreglo, idVertice1);
+		return ret;
 
 	}
-	public Queue<Vertice<K, V>> buscar(Queue<Vertice<K, V>> cola, long id2, long dist, ArregloDinamico<Long[]> arreglo){
+	public Queue<Vertice<K, V>> buscar(Queue<Vertice<K, V>> cola, long id2, long dist, ArregloDinamico<Long[]> arreglo, long id1){
 		Queue<Vertice<K, V>> colaRetorno = new Queue<Vertice<K,V>>();
 		while(!cola.isEmpty()){
 			Vertice<K, V> u = cola.dequeue();
 			if(u.equals(grafo.getVertex(id2))){
+				for(int i = 0; i<arreglo.darTamano();i++){
+					if(arreglo.darElemento(i)[0]==u.darInfo().getId()){
+						colaRetorno = regresar(arreglo, arreglo.darElemento(i)[2], colaRetorno, id1);
+						return colaRetorno;
+					}
+				}
 				
 			}
 			for(int i = 0; i<u.darInfo().getAdj().length;i++){
@@ -447,15 +454,24 @@ public class Controller<K, V, A> {
 				Vertice<K, V> vertex = grafo.getVertex(k);
 				cola.enqueue(vertex);
 				Long[] datos = {vertex.darInfo().getId(),dist+1,u.darInfo().getId()};
+				arreglo.agregar(datos);
 			}
-			buscar(cola, id2, dist, arreglo);
+			buscar(cola, id2, dist, arreglo, id1);
 		}
 		return colaRetorno;
 	}
 	
-	public void regresar(ArregloDinamico<Vertice<K, V>> arreglo){
-		
-
+	public Queue<Vertice<K, V>> regresar(ArregloDinamico<Long[]> arreglo, long id2,Queue<Vertice<K, V>> cola, long id1){
+		for(int i = 0; i<arreglo.darTamano();i++){
+			if(arreglo.darElemento(i)[0]==id2){
+				cola.enqueue(grafo.getVertex(id2));
+				if(arreglo.darElemento(i)[2]==id1){
+					return cola;
+				}
+				regresar(arreglo, arreglo.darElemento(i)[2], cola, id1);
+			}
+		}
+		return cola;
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
