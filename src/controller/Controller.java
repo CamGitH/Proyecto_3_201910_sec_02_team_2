@@ -329,17 +329,17 @@ public class Controller<K, V, A> {
 
 				}
 
-				try {
-					grafo.addVertex(lista[i].getId(), lista[i]);
-				} catch (Exception e) {
-
-					e.printStackTrace();
-				}
+								try {
+									grafo.addVertex(lista[i].getId(), lista[i]);
+								} catch (Exception e) {
+				
+									e.printStackTrace();
+								}
 
 			}
 
 		}
-
+	
 
 
 	}
@@ -371,8 +371,9 @@ public class Controller<K, V, A> {
 	 * Requerimiento 1A: Encontrar el camino de costo mï¿½nimo para un viaje entre dos ubicaciones geogrï¿½ficas.
 	 * @param idVertice2 
 	 * @param idVertice1 
+	 * @return 
 	 */
-	public void caminoCostoMinimoA1(int idVertice1, int idVertice2) {
+	public Stack caminoCostoMinimoA1(int idVertice1, int idVertice2) {
 		Stack camino = caminoCostoMinimoDijkstraC3(grafo.getVertex(idVertice1));
 		boolean listo = false;
 		Stack ret = new Stack<>();
@@ -392,6 +393,7 @@ public class Controller<K, V, A> {
 				}
 			}
 		}
+		return ret;
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -399,11 +401,19 @@ public class Controller<K, V, A> {
 	 * Requerimiento 2A: Determinar los n vï¿½rtices con mayor nï¿½mero de infracciones. Adicionalmente identificar las
 	 * componentes conectadas (subgrafos) que se definan ï¿½nicamente entre estos n vï¿½rtices
 	 * @param  int n: numero de vertices con mayor numero de infracciones  
+	 * @return 
 	 */
-	public void mayorNumeroVerticesA2(int n) {
-		// TODO Auto-generated method stub
-		ColaPrioridadHeap<Vertice> cola = new ColaPrioridadHeap<>();
-
+	public Stack mayorNumeroVerticesA2(int n) {
+		
+		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
+		for(int i = 1; i<grafo.darListaNodos().size(); i++){
+			cola.insert((Arco<K, V, A>) grafo.darListaNodos().get(i));
+		}
+		Stack ret = new Stack<>();
+		for(int i =1; i<n;i++){
+			ret.push(cola.delMax());
+		}
+		return ret;
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -413,17 +423,12 @@ public class Controller<K, V, A> {
 	 * @param idVertice1 
 	 */
 	public void caminoLongitudMinimoaB1(int idVertice1, int idVertice2) {
+		Vertice<K, V> primero = grafo.getVertex(idVertice1);
 		Queue<Vertice<K, V>> cola = new Queue<>();
-		Vertice<K, V> v = grafo.getVertex(idVertice1);
-		while(!cola.isEmpty()){
-			Vertice<K, V> u = cola.dequeue();
-			for(int i = 0; i<u.darInfo().getAdj().length;i++){
-				long k = u.darInfo().getAdj()[i];
-				Vertice<K, V> vertex = grafo.getVertex(k);
-			}
+		for(int i = 0; i< primero.darInfo().getAdj().length;i++){
+			long id = primero.darInfo().getAdj()[i];
+			grafo.getVertex(id);
 		}
-		
-		
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -465,10 +470,8 @@ public class Controller<K, V, A> {
 				cola.enqueue(vertice);
 			}
 		}
-
-		Queue<Vertice<K, V>> aproximaciones1 = new Queue<>();
-		Queue<Vertice<K, V>> aproximaciones2 = new Queue<>();
-		LinkedList<Vertice<K, V>> lista = new LinkedList<>();
+		
+		Queue<Vertice<K, V>> aproximaciones = new Queue<>();
 		for(int i = 0; i <arreglo.darTamano();i++){
 			double minimo = 999999999;
 			Vertice<K, V> cercano = new Vertice<>();
@@ -481,24 +484,11 @@ public class Controller<K, V, A> {
 				}
 				cola.enqueue(vertice2);
 			}
-			lista.add(cercano);
-			aproximaciones1.enqueue(cercano);
+			aproximaciones.enqueue(cercano);
+			
+			
 		}
-		for(int i = 0; i<aproximaciones1.size();i++){
-			boolean repetido = false;
-			Vertice<K, V> v = aproximaciones1.dequeue();
-			NodoLinkedList<Vertice<K, V>> u = lista.darPrimero();
-			while(u!=null){
-				if(v.darID()==u.darElemento().darID()){
-					repetido=true;
-				}
-				u=u.darSiguiente();
-			}
-			if(!repetido){
-				aproximaciones2.enqueue(v);
-			}
-		}
-		return aproximaciones2;
+		return aproximaciones;
 
 
 	}
