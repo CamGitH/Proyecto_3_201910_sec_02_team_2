@@ -373,7 +373,25 @@ public class Controller<K, V, A> {
 	 * @param idVertice1 
 	 */
 	public void caminoCostoMinimoA1(int idVertice1, int idVertice2) {
-		// TODO Auto-generated method stub
+		Stack camino = caminoCostoMinimoDijkstraC3(grafo.getVertex(idVertice1));
+		boolean listo = false;
+		Stack ret = new Stack<>();
+		while(!listo){
+			Vertice<K, V> act = (Vertice<K, V>) camino.pop();
+			if(act.darID().equals(idVertice2)){
+				ret.push(act);
+			}
+			else if(act.darID().equals(idVertice1)){
+				ret.push(act);
+				listo=true;
+			}
+			else{
+				act=(Vertice<K, V>) camino.pop();
+				if(camino.isEmpty()){
+					break;
+				}
+			}
+		}
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
