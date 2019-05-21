@@ -412,17 +412,38 @@ public class Controller<K, V, A> {
 	 * @param idVertice2 
 	 * @param idVertice1 
 	 */
-	public void caminoLongitudMinimoaB1(int idVertice1, int idVertice2) {
+	public void caminoLongitudMinimoaB1(long idVertice1, long idVertice2) {
+		//BFS
+		Long dist = 0L;
 		Queue<Vertice<K, V>> cola = new Queue<>();
+		ArregloDinamico<Long[]> arreglo = new ArregloDinamico<>(10);
 		Vertice<K, V> v = grafo.getVertex(idVertice1);
+		cola.enqueue(v);
+		Long[] datos = {v.darInfo().getId(),dist,0L};
+		arreglo.agregar(datos);
+		buscar(cola, idVertice2, dist, arreglo);
+
+
+	}
+	public Queue<Vertice<K, V>> buscar(Queue<Vertice<K, V>> cola, long id2, long dist, ArregloDinamico<Long[]> arreglo){
+		Queue<Vertice<K, V>> colaRetorno = new Queue<Vertice<K,V>>();
 		while(!cola.isEmpty()){
 			Vertice<K, V> u = cola.dequeue();
+			if(u.equals(grafo.getVertex(id2))){
+				
+			}
 			for(int i = 0; i<u.darInfo().getAdj().length;i++){
 				long k = u.darInfo().getAdj()[i];
 				Vertice<K, V> vertex = grafo.getVertex(k);
+				cola.enqueue(vertex);
+				Long[] datos = {vertex.darInfo().getId(),dist+1,u.darInfo().getId()};
 			}
+			buscar(cola, id2, dist, arreglo);
 		}
-		
+		return colaRetorno;
+	}
+	
+	public void regresar(ArregloDinamico<Vertice<K, V>> arreglo){
 		
 	}
 
