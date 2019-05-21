@@ -50,7 +50,8 @@ public class PolylineExample extends MapView {
                     LatLng[] path = {new LatLng(38.989931, -77.909003),
                             new LatLng(38.989931, -77.609003),
                             new LatLng(39.089931, -77.109003),
-                            new LatLng(38.009931, -76.909003)
+                            new LatLng(38.009931, -76.909003),
+                            new LatLng(39.009931, -75.909003)
                             };
                     // Creating a new polyline object
                     Polyline polyline = new Polyline(map);
@@ -68,6 +69,8 @@ public class PolylineExample extends MapView {
                     options.setStrokeWeight(2.0);
                     // Applying options to the polyline
                     polyline.setOptions(options);
+                    
+                    
                 }
             }
         });
@@ -76,11 +79,11 @@ public class PolylineExample extends MapView {
     public static void main(String[] args) {
         final PolylineExample sample = new PolylineExample();
 
-        JFrame frame = new JFrame("Polylines");
+        JFrame frame = new JFrame("Mapa");
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(sample, BorderLayout.CENTER);
-        frame.setSize(700, 500);
+        frame.setSize(1500, 1500);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

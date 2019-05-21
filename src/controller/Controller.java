@@ -329,17 +329,17 @@ public class Controller<K, V, A> {
 
 				}
 
-								try {
-									grafo.addVertex(lista[i].getId(), lista[i]);
-								} catch (Exception e) {
-				
-									e.printStackTrace();
-								}
+				try {
+					grafo.addVertex(lista[i].getId(), lista[i]);
+				} catch (Exception e) {
+
+					e.printStackTrace();
+				}
 
 			}
 
 		}
-	
+
 
 
 	}
@@ -395,12 +395,17 @@ public class Controller<K, V, A> {
 	 * @param idVertice1 
 	 */
 	public void caminoLongitudMinimoaB1(int idVertice1, int idVertice2) {
-		Vertice<K, V> primero = grafo.getVertex(idVertice1);
 		Queue<Vertice<K, V>> cola = new Queue<>();
-		for(int i = 0; i< primero.darInfo().getAdj().length;i++){
-			long id = primero.darInfo().getAdj()[i];
-			grafo.getVertex(id);
+		Vertice<K, V> v = grafo.getVertex(idVertice1);
+		while(!cola.isEmpty()){
+			Vertice<K, V> u = cola.dequeue();
+			for(int i = 0; i<u.darInfo().getAdj().length;i++){
+				long k = u.darInfo().getAdj()[i];
+				Vertice<K, V> vertex = grafo.getVertex(k);
+			}
 		}
+		
+		
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -442,8 +447,10 @@ public class Controller<K, V, A> {
 				cola.enqueue(vertice);
 			}
 		}
-		
-		Queue<Vertice<K, V>> aproximaciones = new Queue<>();
+
+		Queue<Vertice<K, V>> aproximaciones1 = new Queue<>();
+		Queue<Vertice<K, V>> aproximaciones2 = new Queue<>();
+		LinkedList<Vertice<K, V>> lista = new LinkedList<>();
 		for(int i = 0; i <arreglo.darTamano();i++){
 			double minimo = 999999999;
 			Vertice<K, V> cercano = new Vertice<>();
@@ -456,11 +463,24 @@ public class Controller<K, V, A> {
 				}
 				cola.enqueue(vertice2);
 			}
-			aproximaciones.enqueue(cercano);
-			
-			
+			lista.add(cercano);
+			aproximaciones1.enqueue(cercano);
 		}
-		return aproximaciones;
+		for(int i = 0; i<aproximaciones1.size();i++){
+			boolean repetido = false;
+			Vertice<K, V> v = aproximaciones1.dequeue();
+			NodoLinkedList<Vertice<K, V>> u = lista.darPrimero();
+			while(u!=null){
+				if(v.darID()==u.darElemento().darID()){
+					repetido=true;
+				}
+				u=u.darSiguiente();
+			}
+			if(!repetido){
+				aproximaciones2.enqueue(v);
+			}
+		}
+		return aproximaciones2;
 
 
 	}
