@@ -178,7 +178,7 @@ public class Controller<K, V, A> {
 
 
 				startTime = System.currentTimeMillis();
-				view.printB2(definirCuadriculaB2(lonMin,lonMax,latMin,latMax,columnas,filas);
+				view.printB2(definirCuadriculaB2(lonMin,lonMax,latMin,latMax,columnas,filas));
 				endTime = System.currentTimeMillis();
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
@@ -666,10 +666,59 @@ public class Controller<K, V, A> {
 	 * @param idVertice2 
 	 * @param idVertice1 
 	 */
-	public void caminoMasCortoC4(int idVertice1, int idVertice2) {
-		// TODO Auto-generated method stub
+	public Queue<Vertice<K, V>> caminoMasCortoC4(int idVertice1, int idVertice2) {
+		
+		Queue<Vertice<K, V>> ret = new Queue<Vertice<K,V>>();
+		Queue<Vertice<K, V>> cola = new Queue<>();
+		ArregloDinamico<Long[]> arreglo = new ArregloDinamico<>(10);
+		Vertice<K, V> v = grafo.getVertex(idVertice1);
+		Long dist = (long) v.darInfo().getInfractions().length;
+		cola.enqueue(v);
+		Long[] datos = {v.darInfo().getId(),dist,0L};
+		arreglo.agregar(datos);
+		ret = buscar(cola, idVertice2, dist, arreglo, idVertice1);
+		return ret;
 
 	}
+	public Queue<Vertice<K, V>> buscar2(Queue<Vertice<K, V>> cola, long id2, long dist, ArregloDinamico<Long[]> arreglo, long id1){
+		Queue<Vertice<K, V>> colaRetorno = new Queue<Vertice<K,V>>();
+		while(!cola.isEmpty()){
+			Vertice<K, V> u = cola.dequeue();
+			if(u.equals(grafo.getVertex(id2))){
+				for(int i = 0; i<arreglo.darTamano();i++){
+					if(arreglo.darElemento(i)[0]==u.darInfo().getId()){
+						colaRetorno = regresar(arreglo, arreglo.darElemento(i)[2], colaRetorno, id1);
+						return colaRetorno;
+					}
+				}
+				
+			}
+			for(int i = 0; i<u.darInfo().getAdj().length;i++){
+				long k = u.darInfo().getAdj()[i];
+				Vertice<K, V> vertex = grafo.getVertex(k);
+				cola.enqueue(vertex);
+				Long[] datos = {vertex.darInfo().getId(),dist+vertex.darInfo().getInfractions().length,u.darInfo().getId()};
+				arreglo.agregar(datos);
+			}
+			buscar(cola, id2, dist, arreglo, id1);
+		}
+		return colaRetorno;
+	}
+	
+	public Queue<Vertice<K, V>> regresar2(ArregloDinamico<Long[]> arreglo, long id2,Queue<Vertice<K, V>> cola, long id1){
+		for(int i = 0; i<arreglo.darTamano();i++){
+			if(arreglo.darElemento(i)[0]==id2){
+				cola.enqueue(grafo.getVertex(id2));
+				if(arreglo.darElemento(i)[2]==id1){
+					return cola;
+				}
+				regresar(arreglo, arreglo.darElemento(i)[2], cola, id1);
+			}
+		}
+		return cola;
+	}
+
+	
 	@SuppressWarnings("deprecation")
 	public void loadMovingViolations(int numeroSemestre) {
 		List<String[]> list = new ArrayList<String[]>();
