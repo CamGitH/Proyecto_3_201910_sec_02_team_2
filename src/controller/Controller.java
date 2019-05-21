@@ -13,6 +13,7 @@ import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 
 import model.estructuras.Arco;
+import model.estructuras.ArregloDinamico;
 import model.estructuras.ColaPrioridadHeap;
 import model.estructuras.Graph;
 import model.estructuras.LinkedList;
@@ -75,7 +76,7 @@ public class Controller<K, V, A> {
 				view.printMessage("Escoger el grafo a cargar: (1) Downtown  o (2)Ciudad Completa.");
 				int ruta = sc.nextInt();
 				if(ruta == 0)
-					RutaArchivo = "./data/grafo.json"; //TODO Dar la ruta del archivo de Downtown
+					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de Downtown
 				else
 					RutaArchivo = "./data/finalGraph.json"; //TODO Dar la ruta del archivo de la ciudad completa
 
@@ -225,7 +226,7 @@ public class Controller<K, V, A> {
 			case 7:
 
 				startTime = System.currentTimeMillis();
-				caminoCostoMinimoDijkstraC3();
+				caminoCostoMinimoDijkstraC3(null);
 				endTime = System.currentTimeMillis();
 				duration = endTime - startTime;
 				view.printMessage("Tiempo del requerimiento: " + duration + " milisegundos");
@@ -304,7 +305,7 @@ public class Controller<K, V, A> {
 			table.put(key, lista[i]);
 
 		}
-		for(int i = 0; i<lista.length/20;i++){
+		for(int i = 0; i<lista.length;i++){
 			System.out.println(i);
 			long[] listaAdj = lista[i].getAdj();
 
@@ -312,42 +313,34 @@ public class Controller<K, V, A> {
 
 				for(int j = 0; j<listaAdj.length;j++){
 
-					
+
 					GraphInfo info = table.get(listaAdj[j]);
 					if(info!=null){
 
-					double peso = distance(lista[i].getLat(), info.getLat(), lista[i].getLon(), info.getLon(), 0.0, 0.0);
-					try {
-						grafo.addEdge(lista[i].getId(), listaAdj[j],peso);
-					} catch (Exception e) {
+						double peso = distance(lista[i].getLat(), info.getLat(), lista[i].getLon(), info.getLon(), 0.0, 0.0);
+						try {
+							grafo.addEdge(lista[i].getId(), listaAdj[j],peso);
+						} catch (Exception e) {
 
-						e.printStackTrace();
+							e.printStackTrace();
+						}
+
 					}
 
 				}
-					
-				}
 
-//				try {
-//					grafo.addVertex(lista[i].getId(), lista[i]);
-//				} catch (Exception e) {
-//
-//					e.printStackTrace();
-//				}
+								try {
+									grafo.addVertex(lista[i].getId(), lista[i]);
+								} catch (Exception e) {
+				
+									e.printStackTrace();
+								}
 
 			}
 
 		}
-		for (int i = 0; i < lista.length; i++) {
-			try {
-				System.out.println(i);
-				grafo.addVertex(lista[i].getId(), lista[i]);
-			} catch (Exception e) {
+	
 
-				e.printStackTrace();
-			}
-		}
-		
 
 	}
 
@@ -402,8 +395,12 @@ public class Controller<K, V, A> {
 	 * @param idVertice1 
 	 */
 	public void caminoLongitudMinimoaB1(int idVertice1, int idVertice2) {
-		// TODO Auto-generated method stub
-
+		Vertice<K, V> primero = grafo.getVertex(idVertice1);
+		Queue<Vertice<K, V>> cola = new Queue<>();
+		for(int i = 0; i< primero.darInfo().getAdj().length;i++){
+			long id = primero.darInfo().getAdj()[i];
+			grafo.getVertex(id);
+		}
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -416,9 +413,56 @@ public class Controller<K, V, A> {
 	 * @param  columnas: Numero de columnas de la cuadricula
 	 * @param  filas: Numero de filas de la cuadricula
 	 */
-	public void definirCuadriculaB2(double lonMin, double lonMax, double latMin, double latMax, int columnas,
+	public Queue<Vertice<K, V>> definirCuadriculaB2(double lonMin, double lonMax, double latMin, double latMax, int columnas,
 			int filas) {
-		// TODO Auto-generated method stub
+		double distanciaHorinzontal = (latMax-latMin)/columnas-1;
+		double distanciaVertical = (lonMax-lonMin)/filas-1;
+
+		double latitudMax = latMax;
+		double longitudMin = lonMin;
+
+		ArregloDinamico<Double[]> arreglo = new ArregloDinamico<>(10);
+		for(int i = 0; i < filas;i++){
+			for ( int j = 0; j < columnas; j++){
+				Double[] datos = {0.0,0.0};
+				datos[0] = latitudMax;
+				datos[1] = longitudMin;
+				arreglo.agregar(datos);
+				longitudMin += distanciaHorinzontal;
+			}
+			latitudMax -= distanciaVertical;
+			longitudMin = lonMin;
+		}
+		Queue<Vertice<K, V>> cola = new Queue<>();
+		for(int i = 0; i<grafo.darListaNodos().size();i++){
+			Vertice<K, V> vertice = (Vertice<K, V>) grafo.darListaNodos().get(i);
+
+			if(vertice.darInfo().getLat()>latMin&&vertice.darInfo().getLat()<latMax&&
+					vertice.darInfo().getLon()>lonMin&&vertice.darInfo().getLon()<lonMax){
+				cola.enqueue(vertice);
+			}
+		}
+		
+		Queue<Vertice<K, V>> aproximaciones = new Queue<>();
+		for(int i = 0; i <arreglo.darTamano();i++){
+			double minimo = 999999999;
+			Vertice<K, V> cercano = new Vertice<>();
+			for (int j = 0; j < cola.size(); j++) {
+				Vertice<K, V> vertice2 = cola.dequeue(); 
+				double distancia = distance(arreglo.darElemento(i)[0], vertice2.darInfo().getLat(), arreglo.darElemento(i)[1], vertice2.darInfo().getLon(), 0.0, 0.0);
+				if(distancia<minimo){
+					cercano = vertice2;
+					minimo = distancia;
+				}
+				cola.enqueue(vertice2);
+			}
+			aproximaciones.enqueue(cercano);
+			
+			
+		}
+		return aproximaciones;
+
+
 	}
 
 	// TODO El tipo de retorno de los métodos puede ajustarse según la conveniencia
@@ -510,14 +554,14 @@ public class Controller<K, V, A> {
 		Stack<Arco<K, V, A>> ret = new Stack<>();
 		LinkedList<Arco<K, V, A>> arcossolos = grafo.darArcos(desde);
 		ColaPrioridadHeap<Arco<K, V, A>> cola = new ColaPrioridadHeap<>();
-		
+
 		int marcados=0;
 		while(marcados<grafo.darListaNodos().size()){
 			while(cola.size()!=0){
 				cola.delMax();
 			}
 			LinkedList<Arco<K, V, A>> lista = grafo.darArcos(desde.darID());
-			
+
 			for(int i=0;i<lista.getSize();i++){
 				cola.insert(lista.get(i).darElemento());
 			}
@@ -533,7 +577,7 @@ public class Controller<K, V, A> {
 				marcados++;
 				ret.add(min);
 				desde=grafo.getVertex(min.darVerticeOrigen());
-				
+
 			}
 			else if(min.darVerticeOrigen()==desde){
 				grafo.getVertex(min.darVerticeOrigen()).marcar();
